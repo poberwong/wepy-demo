@@ -1,0 +1,75 @@
+<style lang="less">
+  .container {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .header {
+    height: 240rpx;
+  }
+  .input {
+    flex-grow: 1;
+    height: 0;
+    margin: 0;
+  }
+  .input-placeholder {
+    color: #bbbbbb;
+  }
+  .login-btn {
+
+  }
+</style>
+<template>
+  <view class="container">
+    <view class="header" />
+    <input class="input" @input="bindUsername" placeholder-class="input-placeholder" placeholder="请在此处输入用户名"/>
+    <input class="input" @input="bindPassword" placeholder-class="input-placeholder" placeholder="请在此处输入密码"/>
+    <button @tap="login" size="mini"> Login </button>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import * as auth from '../actions/auth'
+
+export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: 'Login'
+    }
+
+    components = {
+    }
+
+    data = {
+      username: '',
+      psd: ''
+    }
+
+    computed = {
+    }
+
+    methods = {
+      bindUsername (e) {
+        this.username = e.detail.value
+      },
+
+      bindPassword (e) {
+        this.psd = e.detail.value
+      },
+
+      login () {
+        auth.login({
+          id: this.username,
+          password: this.psd
+        }).then(res => {
+          wepy.switchTab({url: '/pages/index'})
+        })
+      }
+    };
+
+    onLoad () {
+    }
+  }
+</script>

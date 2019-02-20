@@ -1,0 +1,90 @@
+<style lang="less">
+.container {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+  .series {
+    align-self: stretch;
+    margin: 12rpx;
+    background-color: green;
+    padding: 12rpx;
+    border-radius: 8rpx;
+  }
+
+  .seriesName {
+    font-size: 14px;
+    color: white;
+  }
+
+  .project {
+    margin: 10rpx 0rpx 0rpx 0rpx;
+    display: flex;
+    padding: 15rpx 10rpx;
+    border-radius: 6rpx;
+    background-color: rgba(255, 255, 255, 0.7);
+  }
+
+  .projectName {
+    font-size: 12px;
+    color: white;
+  }
+
+
+</style>
+<template>
+  <view class="container">
+    <repeat for="{{series}}" key="index" index="index" item="item">
+      <view class="series">
+        <text class="seriesName">{{item.name}}</text>
+        <repeat for="{{item.projects}}" key="index" index="index" item="project">
+          <view class="project" @tap="openForm({{project.id}})">
+            <text class="projectName">{{project.name}}</text>
+          </view>
+        </repeat>
+      </view>
+    </repeat>
+  </view>
+</template>
+
+  <script>
+import wepy from 'wepy'
+
+export default class Index extends wepy.page {
+  stageId = ''
+
+  config = {
+    navigationBarTitleText: '申请单'
+  }
+
+  components = {
+  }
+
+  data = {
+    stage: {}
+  }
+
+  computed = {
+    series () {
+      return this.stage.seriesList || []
+    }
+  }
+
+  methods = {
+    openForm (projectId) {
+      wepy.showToast({
+        title: projectId,
+        icon: 'none'
+      })
+    }
+  };
+
+  onLoad (options) {
+    this.stageId = options.id
+    this.stage = wepy.$instance.getStage(this.stageId)
+    wepy.setNavigationBarTitle({title: '申请单 - ' + this.stage.title})
+  }
+}
+</script>
