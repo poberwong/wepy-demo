@@ -1,0 +1,88 @@
+<style lang="less">
+  .container {
+    box-sizing: border-box;
+    display: flex;
+  }
+  .footer {
+    align-self: stretch;
+    padding: 15rpx;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 10rpx;
+  }
+  .footer .line {
+    height: 1rpx;
+    flex: 1;
+    background-color: gray;
+  }
+  .footer-text {
+    font-size: 12px;
+    margin: 0 15rpx;
+  }
+</style>
+<template>
+  <view class="container">
+    <repeat for="{{reports}}" key="index" index="index" item="item">
+      <reportItem :report.sync="item" @openReport.user="openReport" />
+    </repeat>
+    <view class='footer' @tap="loadMore">
+      <view class="line" />
+        <text class="footer-text">点击加载更多</text>
+      <view class="line" />
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+import * as main from '../actions/main'
+import ReportItem from '../components/reportItem'
+
+export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '报告查询',
+      enablePullDownRefresh: true
+    };
+
+    components = {
+      reportItem: ReportItem
+    };
+
+    data = {
+      reports: []
+    };
+
+    methods = {
+      openReport (report) {
+        wepy.showToast({
+          title: report.clientNumber,
+          icon: 'none'
+        })
+      },
+      loadMore () {
+        main.loadReportList({ limit: 20, offset: this.reports.length })
+          .then(res => {
+            this.reports.push(...res)
+            this.$apply()
+          })
+      }
+    };
+
+    onPullDownRefresh () {
+      this.refresh().then(wepy.stopPullDownRefresh)
+    }
+
+    onLoad () {
+      this.refresh()
+    }
+
+    refresh () {
+      return main.loadReportList({ limit: 20 })
+        .then(res => {
+          this.reports = res
+          this.$apply()
+        })
+    }
+  }
+</script>

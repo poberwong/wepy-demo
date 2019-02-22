@@ -1,0 +1,38 @@
+<style lang="less">
+  .item-container {
+    display: flex;
+    flex-direction: row;
+    align-self: stretch;
+    margin: 20rpx 0rpx;
+  }
+  .item-column {
+    flex: 2;
+    font-size: 13px;
+    text-align: center;
+  }
+  .item-column:last-child {
+    flex: 1;
+  }
+</style>
+<template>
+  <view class="item-container" @tap="tapItem">
+    <text class="item-column">{{report.clientNumber}}</text>
+    <text class="item-column">{{report.project}}</text>
+    <text class="item-column">{{report.customers}}</text>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class Counter extends wepy.component {
+    props = {
+      report: Object
+    }
+
+    methods = {
+      tapItem () { // 完全可以在这里执行打开，这里仅作为练习。
+        this.$emit('openReport', this.report)
+      }
+    }
+  }
+</script>
