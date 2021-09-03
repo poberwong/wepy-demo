@@ -1,6 +1,6 @@
 {
   "name": "vendor-weapp",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "wechat mini programs for vendor client",
   "main": "dist/app.js",
   "scripts": {
